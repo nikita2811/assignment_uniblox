@@ -67,7 +67,7 @@ Includes tests for repeated checkout (same idempotency key), concurrent checkout
 
 ## API overview
 
-Base path: `/api` ⚠️ VERIFY. All bodies are JSON. Money is returned as integer minor units (cents) alongside a currency code.
+Base path: `/api`.
 
 | Method | Path | Purpose | Success | Notable errors |
 |---|---|---|---|---|
@@ -113,7 +113,7 @@ Every error returns a stable machine-readable `code` plus a human message:
 ```json
 { "error": { "code": "insufficient_stock", "message": "Only 1 unit(s) of 'Limited Sneaker' available.", "details": { "product_id": 3, "available": 1, "requested": 2 } } }
 ```
-Codes (⚠️ VERIFY against implementation): `validation_error`, `product_not_found`, `cart_not_found`, `cart_already_checked_out`, `cart_empty`, `insufficient_stock`, `coupon_invalid`, `coupon_already_redeemed`, `idempotency_key_required`, `idempotency_key_reused`, `no_eligible_milestone`.
+Codes : `validation_error`, `product_not_found`, `cart_not_found`, `cart_already_checked_out`, `cart_empty`, `insufficient_stock`, `coupon_invalid`, `coupon_already_redeemed`, `idempotency_key_required`, `idempotency_key_reused`, `no_eligible_milestone`.
 
 ---
 
