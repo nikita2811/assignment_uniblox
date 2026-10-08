@@ -8,7 +8,7 @@ from django.db.models import Count, Sum
 from store.api_errors import ApiError
 from store.models import Coupon, Order, OrderItem, Product
 
-from .config import coupon_config
+from store.config import coupon_config
 
 
 def _next_unrewarded_milestone(n, existing):
