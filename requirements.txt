@@ -1,0 +1,10 @@
+gunicorn
+djangorestframework
+psycopg[binary]
+psycopg2-binary
+django-environ
+python-dotenv
+
+# test
+pytest
+pytest-django
