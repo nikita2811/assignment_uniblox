@@ -2,7 +2,7 @@ from django.urls import path
 from store.views.cartViews import CartItemListView,CartCreateView,CartDetailView,CartItemDetailView
 from store.views.orderViews import OrderDetailView,CartCheckoutView
 from store.views.productViews import ProductDetailView,ProductListView,AdminProductCreateView,AdminProductDetailView,AdminProductInventoryView
-
+from store.views.couponViews import CouponGenerateView,CouponListView,ReportView
 urlpatterns=[
    
     path("carts/", CartCreateView.as_view(), name="cart-create"),
@@ -19,4 +19,7 @@ urlpatterns=[
          name="admin-product-detail"),
     path("admin/products/<str:product_id>/adjust-inventory/", AdminProductInventoryView.as_view(),
          name="admin-product-adjust-inventory"),
+    path("admin/coupons/", CouponListView.as_view(), name="admin-coupon-list"),
+    path("admin/coupons/generate/", CouponGenerateView.as_view(), name="admin-coupon-generate"),
+    path("admin/report/", ReportView.as_view(), name="admin-report"),
 ]
