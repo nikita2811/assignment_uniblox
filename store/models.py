@@ -50,3 +50,19 @@ class Cart(models.Model):
         max_length=20, choices=Status.choices, default=Status.OPEN
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.IntegerField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["cart", "product"], name="uniq_cart_product"
+            ),
+            models.CheckConstraint(
+                check=Q(quantity__gt=0), name="cartitem_qty_gt_0"
+            ),
+        ]
