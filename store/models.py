@@ -63,6 +63,6 @@ class CartItem(models.Model):
                 fields=["cart", "product"], name="uniq_cart_product"
             ),
             models.CheckConstraint(
-                check=Q(quantity__gt=0), name="cartitem_qty_gt_0"
+                condition=Q(quantity__gt=0), name="cartitem_qty_gt_0"
             ),
         ]
