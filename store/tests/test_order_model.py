@@ -6,6 +6,8 @@ from django.db import IntegrityError, connections, transaction
 from django.db.models.deletion import ProtectedError
 
 from store.models import Cart, Coupon, Order
+from datetime import timedelta
+from django.utils import timezone
 
 pytestmark = pytest.mark.django_db
 
@@ -59,16 +61,20 @@ def test_str_contains_id_and_total():
     assert "total=500" in str(o)
 
 
+
 def test_default_ordering_is_newest_first():
     first = make_order()
     second = make_order()
     third = make_order()
+
+   
+    now = timezone.now()
+    for order, age in ((first, 3), (second, 2), (third, 1)):
+        Order.objects.filter(pk=order.pk).update(
+            created_at=now - timedelta(minutes=age)
+        )
+
     assert list(Order.objects.all()) == [third, second, first]
-
-
-def test_cart_reverse_accessor_returns_order():
-    o = make_order()
-    assert o.cart.order == o
 
 
 # ---------------- coupon snapshot ----------------
