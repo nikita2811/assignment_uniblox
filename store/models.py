@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 import uuid
 from django.utils.text import slugify
+import secrets
 
 
 class Product(models.Model):
@@ -66,3 +67,42 @@ class CartItem(models.Model):
                 condition=Q(quantity__gt=0), name="cartitem_qty_gt_0"
             ),
         ]
+
+
+
+def generate_coupon_code():
+    return f"SAVE-{secrets.token_hex(5).upper()}"
+
+
+class Coupon(models.Model):
+    class Status(models.TextChoices):
+        AVAILABLE = "available"
+        REDEEMED = "redeemed"
+
+    code = models.CharField(max_length=32, unique=True, default=generate_coupon_code)
+    milestone = models.PositiveIntegerField(unique=True)        
+    discount_percent = models.PositiveSmallIntegerField()      
+    status = models.CharField(
+        max_length=20, choices=Status.choices, default=Status.AVAILABLE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    redeemed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["milestone"]
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(discount_percent__gte=1) & Q(discount_percent__lte=100),
+                name="coupon_percent_1_100",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    Q(status="redeemed", redeemed_at__isnull=False)
+                    | Q(status="available", redeemed_at__isnull=True)
+                ),
+                name="coupon_status_redeemed_at_consistent",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.code} ({self.discount_percent}% off, {self.status})"
