@@ -10,7 +10,7 @@ from rest_framework.test import APIClient, APITestCase
 
 from store.models import Cart, CartItem, Order, Product
 
-from store.services import MAX_QUANTITY
+from store.services.cart_services import MAX_QUANTITY
 
 
 # ------------------------------------------------------------------- helpers
