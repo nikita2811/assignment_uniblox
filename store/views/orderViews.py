@@ -32,4 +32,4 @@ class CartCheckoutView(PublicAPIView):
 
 class OrderDetailView(PublicAPIView):
     def get(self, request, order_id):
-        return Response(OrderSerializer(services.get_order(order_id)).data)
+        return Response(OrderSerializer(order_service.get_order(order_id)).data)
