@@ -9,7 +9,7 @@ from django.utils.text import slugify
 class Product(models.Model):
     id= models.UUIDField(default=uuid.uuid4,primary_key=True,editable=False)
     name = models.CharField(max_length=200)
-    sku = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    sku = models.CharField(max_length=100, unique=True, null=True, blank=True) # added for idempotency
     product_qty = models.CharField(max_length=64,blank=True) # pack size, e.g. "5kg", "500g"
     unit_price = models.PositiveIntegerField()
     inventory = models.PositiveIntegerField()
