@@ -1,4 +1,4 @@
-# cart/tests/test_cart_model.py
+
 import uuid
 
 import pytest

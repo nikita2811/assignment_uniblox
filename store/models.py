@@ -38,3 +38,15 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Cart(models.Model):
+    class Status(models.TextChoices):
+        OPEN = "open"
+        CHECKED_OUT = "checked_out"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    status = models.CharField(
+        max_length=20, choices=Status.choices, default=Status.OPEN
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
