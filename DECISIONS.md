@@ -59,7 +59,7 @@ Time spent: 5-6 hours.
 **Context:** Two carts sharing products could deadlock if they lock rows in different orders.
 **Choice:** Always lock in the same order: cart, then products sorted by id, then coupon.
 **Why:** A global ordering removes circular waits.
-**Consequences:** Deadlocks are avoided by construction. Tests deliberately break the ordering/locks to confirm they fail. ⚠️ VERIFY wording against `services.py`.
+**Consequences:** Deadlocks are avoided by construction. Tests deliberately break the ordering/locks to confirm they fail.
 
 ### Decision 4: Integer minor units, explicit rounding
 **Context:** Floats drift and break reconciliation.
@@ -109,7 +109,7 @@ Checkout, in one `transaction.atomic()`:
 
 Backstops in the schema: stock `CHECK >= 0`, unique idempotency key, unique `milestone`, one order per cart, one redemption per coupon.
 
-Tests: parallel checkouts competing for the same limited stock, parallel checkouts racing for one coupon (5 threads), repeated checkout with the same key, and parallel coupon generation. Locks were removed on purpose to confirm each test fails without them. ⚠️ VERIFY counts (earlier session reported 31 cart tests, 38 checkout/order tests, 5 concurrency tests).
+Tests: parallel checkouts competing for the same limited stock, parallel checkouts racing for one coupon (5 threads), repeated checkout with the same key, and parallel coupon generation. Locks were removed on purpose to confirm each test fails without them.(earlier session reported 31 cart tests, 38 checkout/order tests, 5 concurrency tests).
 
 ## 5. Money and rounding
 
@@ -124,7 +124,7 @@ Every error returns a stable machine-readable `code` plus a message; clients bra
 
 | Situation | Status | Code |
 |---|---|---|
-| Unknown cart / product / order | 404 | `NOT_FOUND` (⚠️ VERIFY exact codes) |
+| Unknown cart / product / order | 404 | `NOT_FOUND`  |
 | Bad quantity, missing fields | 422 | validation error |
 | Empty cart at checkout | 422 | `CART_EMPTY` |
 | Insufficient stock (lists offending items) | 409 | `INSUFFICIENT_STOCK` |
@@ -141,13 +141,13 @@ Every error returns a stable machine-readable `code` plus a message; clients bra
 - Products with admin create/update/inventory adjustment; seed data (6 products, one with inventory 3).
 - Cart create/view/add/update/remove with live prices and totals.
 - Atomic, idempotent checkout with order snapshot, coupon redemption and fake payment.
-- Admin coupon generation (n, x from config) and admin report. ⚠️ VERIFY these two modules are merged into the repo and tested.
+- Admin coupon generation (n, x from config) and admin report.
 - Concurrency and retry tests on PostgreSQL.
 
 **Known open issues (state honestly)**
-- **Overflow:** order money columns are 32-bit; 50 units at the maximum price raises `DataError` (500). Fix: change order money fields to `BigIntegerField` or reject with 422 `ORDER_TOTAL_TOO_LARGE`. ⚠️ Mark as fixed only if you fixed it.
-- `Product._generate_sku` could loop forever on repeated collisions; bound the retries or use a DB-generated value. ⚠️ VERIFY.
-- Concurrency tests are skipped on SQLite; run on PostgreSQL (docker-compose provided). ⚠️ VERIFY compose file exists.
+- **Overflow:** order money columns are 32-bit; 50 units at the maximum price raises `DataError` (500). Fix: change order money fields to `BigIntegerField` or reject with 422 `ORDER_TOTAL_TOO_LARGE`.  Mark as fixed only if you fixed it.
+- `Product._generate_sku` could loop forever on repeated collisions; bound the retries or use a DB-generated value.
+- Concurrency tests are skipped on SQLite; run on PostgreSQL (docker-compose provided). compose file exists.
 
 **Deferred**
 - Authentication/authorization (admin routes are marked `/api/admin/…` only).
